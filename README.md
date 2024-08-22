@@ -1,4 +1,4 @@
-# Android Pinterest SDK 
+# Pinterest Bridge SDK
 
 **PinBridge SDK** is an Android library designed to simplify and optimize interaction with the Pinterest REST API. It acts as a facilitator between your app and the wide range of functionality offered by Pinterest, making it easier for developers to integrate and manage features like pins, boards, and visual content directly in their apps.
 
