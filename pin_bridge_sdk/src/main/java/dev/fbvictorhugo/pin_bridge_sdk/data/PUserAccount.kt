@@ -1,15 +1,39 @@
 package dev.fbvictorhugo.pin_bridge_sdk.data
 
+import com.google.gson.annotations.SerializedName
+
 data class PUserAccount(
-    val account_type: String,
+
+    @SerializedName("account_type")
+    val accountType: String,
+
+    @SerializedName("id")
     val id: String,
-    val profile_image: String,
+
+    @SerializedName("profile_image")
+    val profileImage: String,
+
+    @SerializedName("username")
     val username: String,
+
+    @SerializedName("about")
     val about: String,
-    val business_name: String,
-    val board_count: Int,
-    val pin_count: Int,
-    val follower_count: Int,
-    val following_count: Int,
-    val monthly_views: Int
+
+    @SerializedName("business_name")
+    val businessName: String,
+
+    @SerializedName("board_count")
+    val boardCount: Int,
+
+    @SerializedName("pin_count")
+    val pinCount: Int,
+
+    @SerializedName("follower_count")
+    val followerCount: Int,
+
+    @SerializedName("following_count")
+    val followingCount: Int,
+
+    @SerializedName("monthly_views")
+    val monthlyViews: Int
 )

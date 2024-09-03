@@ -1,3 +1,5 @@
+import dev.fbvictorhugo.pin_bridge_sdk.api.AccessTokenResponse
+import dev.fbvictorhugo.pin_bridge_sdk.api.GetBoardsResponse
 import dev.fbvictorhugo.pin_bridge_sdk.data.PUserAccount
 import retrofit2.Call
 import retrofit2.http.Field
@@ -17,20 +19,18 @@ interface PinterestApi {
         @Field("redirect_uri") redirectUri: String
     ): Call<AccessTokenResponse>
 
-    data class AccessTokenResponse(
-        val access_token: String,
-        val token_type: String,
-        val expires_in: Long,
-        val scope: String,
-        val refresh_token: String?,
-        val refresh_token_expires_in: Long?
-    )
-
     @GET("/v5/user_account")
     fun getUserAccount(
         @Header("Authorization") header: String,
         @Header("Content-Type") contentType: String = "application/json",
         @Header("Accept") accept: String = "application/json"
     ): Call<PUserAccount>
+
+    @GET("/v5/boards")
+    fun getBoards(
+        @Header("Authorization") header: String,
+        @Header("Content-Type") contentType: String = "application/json",
+        @Header("Accept") accept: String = "application/json"
+    ): Call<GetBoardsResponse>
 
 }
