@@ -10,15 +10,17 @@
 [Pinterest REST API 5.14.0](https://developers.pinterest.com/docs/api/v5/introduction).
 
 ```
-Pin and Boards
- 
 │
-└── pins
-│   │   
-│   │
 └── boards
-│   │   List boards
-│   │ 
+│   └ [GET] List boards   
+│   └ [GET] List Pins on Boards
+│
+└── user_account
+│   └ [GET] Get user account
+│
+...
+│
+└── oauth
 ```
 ---
 ## Purpose

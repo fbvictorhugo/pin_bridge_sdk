@@ -20,20 +20,20 @@ data class PUserAccount(
     val about: String,
 
     @SerializedName("business_name")
-    val businessName: String,
+    val businessName: String?,
 
     @SerializedName("board_count")
-    val boardCount: Int,
+    val boardCount: Int?,
 
     @SerializedName("pin_count")
-    val pinCount: Int,
+    val pinCount: Int?,
 
     @SerializedName("follower_count")
-    val followerCount: Int,
+    val followerCount: Int?,
 
     @SerializedName("following_count")
-    val followingCount: Int,
+    val followingCount: Int?,
 
     @SerializedName("monthly_views")
-    val monthlyViews: Int
+    val monthlyViews: Int?
 )

@@ -1,6 +1,8 @@
 package dev.fbvictorhugo.pin_bridge_sdk.data
 
 import com.google.gson.annotations.SerializedName
+import dev.fbvictorhugo.pin_bridge_sdk.data.inners.PBoardMedia
+import dev.fbvictorhugo.pin_bridge_sdk.data.inners.Privacy
 import java.util.Date
 
 data class PBoard(
@@ -18,7 +20,7 @@ data class PBoard(
     val name: String,
 
     @SerializedName("description")
-    val description: String,
+    val description: String?,
 
     @SerializedName("collaborator_count")
     val collaboratorCount: Int,
@@ -30,12 +32,12 @@ data class PBoard(
     val followerCount: Int,
 
     @SerializedName("media")
-    val media: PMedia,
+    val media: PBoardMedia,
 
     @SerializedName("owner")
     val owner: POwner,
 
     @SerializedName("privacy")
-    val privacy: String,
+    val privacy: Privacy,
 
     )

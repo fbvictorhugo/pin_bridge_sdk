@@ -1,8 +1,8 @@
-package dev.fbvictorhugo.pin_bridge_sdk.data
+package dev.fbvictorhugo.pin_bridge_sdk.data.inners
 
 import com.google.gson.annotations.SerializedName
 
-data class PMedia(
+data class PBoardMedia(
 
     @SerializedName("image_cover_url")
     val imageCoverUrl: String,
