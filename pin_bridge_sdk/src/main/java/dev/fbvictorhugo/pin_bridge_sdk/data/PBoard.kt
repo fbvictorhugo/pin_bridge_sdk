@@ -1,8 +1,8 @@
 package dev.fbvictorhugo.pin_bridge_sdk.data
 
 import com.google.gson.annotations.SerializedName
+import dev.fbvictorhugo.pin_bridge_sdk.data.enums.Privacy
 import dev.fbvictorhugo.pin_bridge_sdk.data.inners.PBoardMedia
-import dev.fbvictorhugo.pin_bridge_sdk.data.inners.Privacy
 import java.util.Date
 
 data class PBoard(

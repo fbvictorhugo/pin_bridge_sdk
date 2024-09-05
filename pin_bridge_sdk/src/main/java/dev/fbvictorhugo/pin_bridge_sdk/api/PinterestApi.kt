@@ -1,9 +1,9 @@
-import dev.fbvictorhugo.pin_bridge_sdk.api.AccessTokenResponse
+import dev.fbvictorhugo.pin_bridge_sdk.data.PAccessToken
 import dev.fbvictorhugo.pin_bridge_sdk.api.GetBoardsResponse
 import dev.fbvictorhugo.pin_bridge_sdk.api.GetPinsResponse
 import dev.fbvictorhugo.pin_bridge_sdk.data.PUserAccount
-import dev.fbvictorhugo.pin_bridge_sdk.data.inners.CreativeType
-import dev.fbvictorhugo.pin_bridge_sdk.data.inners.Privacy
+import dev.fbvictorhugo.pin_bridge_sdk.data.enums.CreativeType
+import dev.fbvictorhugo.pin_bridge_sdk.data.enums.Privacy
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -22,7 +22,7 @@ interface PinterestApi {
         @Field("grant_type") grantType: String = "authorization_code",
         @Field("code") code: String?,
         @Field("redirect_uri") redirectUri: String
-    ): Call<AccessTokenResponse>
+    ): Call<PAccessToken>
 
     @GET("/v5/user_account")
     fun getUserAccount(

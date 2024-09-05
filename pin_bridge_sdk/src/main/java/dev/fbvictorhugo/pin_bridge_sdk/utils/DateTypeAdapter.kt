@@ -1,4 +1,4 @@
-package dev.fbvictorhugo.pin_bridge_sdk
+package dev.fbvictorhugo.pin_bridge_sdk.utils
 
 import com.google.gson.*
 import java.text.SimpleDateFormat

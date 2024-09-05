@@ -1,8 +1,8 @@
-package dev.fbvictorhugo.pin_bridge_sdk.api
+package dev.fbvictorhugo.pin_bridge_sdk.data
 
 import com.google.gson.annotations.SerializedName
 
-data class AccessTokenResponse(
+data class PAccessToken(
 
     @SerializedName("response_type")
     val responseType: String,

@@ -1,7 +1,7 @@
 package dev.fbvictorhugo.pin_bridge_sdk.data
 
 import com.google.gson.annotations.SerializedName
-import dev.fbvictorhugo.pin_bridge_sdk.data.inners.CreativeType
+import dev.fbvictorhugo.pin_bridge_sdk.data.enums.CreativeType
 import dev.fbvictorhugo.pin_bridge_sdk.data.inners.PPinMedia
 
 data class PPin(

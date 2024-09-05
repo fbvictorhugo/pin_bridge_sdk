@@ -6,11 +6,13 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Base64
 import com.google.gson.GsonBuilder
-import dev.fbvictorhugo.pin_bridge_sdk.api.AccessTokenResponse
 import dev.fbvictorhugo.pin_bridge_sdk.api.GetBoardsResponse
+import dev.fbvictorhugo.pin_bridge_sdk.api.PCallback
 import dev.fbvictorhugo.pin_bridge_sdk.api.scopes.PScope
+import dev.fbvictorhugo.pin_bridge_sdk.data.PAccessToken
 import dev.fbvictorhugo.pin_bridge_sdk.data.PBoard
 import dev.fbvictorhugo.pin_bridge_sdk.data.PUserAccount
+import dev.fbvictorhugo.pin_bridge_sdk.utils.DateTypeAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -103,10 +105,10 @@ object PinBridge {
                 authHeader = authHeader,
                 code = _authorizationCode,
                 redirectUri = _redirectURI
-            ).enqueue(object : Callback<AccessTokenResponse> {
+            ).enqueue(object : Callback<PAccessToken> {
                 override fun onResponse(
-                    call: Call<AccessTokenResponse>,
-                    response: Response<AccessTokenResponse>
+                    call: Call<PAccessToken>,
+                    response: Response<PAccessToken>
                 ) {
                     if (response.isSuccessful) {
                         _accessToken = response.body()?.accessToken
@@ -116,7 +118,7 @@ object PinBridge {
                     }
                 }
 
-                override fun onFailure(call: Call<AccessTokenResponse>, t: Throwable) {
+                override fun onFailure(call: Call<PAccessToken>, t: Throwable) {
                     // Failure
                 }
             })
@@ -153,7 +155,7 @@ object PinBridge {
 
             companion object {
 
-                fun getUserAccount() {
+                fun getUserAccount(callback: PCallback<PUserAccount>) {
 
                     api.getUserAccount(buildBearerToken())
                         .enqueue(object : Callback<PUserAccount> {

@@ -1,4 +1,4 @@
-package dev.fbvictorhugo.pin_bridge_sdk.data.inners
+package dev.fbvictorhugo.pin_bridge_sdk.data.enums
 
 /**
  * Ad creative type enum. For update, only draft ads may update creative type.
