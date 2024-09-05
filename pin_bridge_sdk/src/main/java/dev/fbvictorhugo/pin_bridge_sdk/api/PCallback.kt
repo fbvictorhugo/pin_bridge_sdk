@@ -1,13 +1,11 @@
 package dev.fbvictorhugo.pin_bridge_sdk.api
 
-interface PCallback<PModel> {
+interface PCallback<T> {
 
-    fun onSuccess(response: PResponse<PModel>?) {
+    fun onSuccessful(response: PResponse<T>) {}
 
-    }
+    fun onUnsuccessful(response: PResponse<T>) {}
 
-    fun onFailure(exception: PException?) {
-
-    }
+    fun onFailure(t: Throwable) {}
 
 }
