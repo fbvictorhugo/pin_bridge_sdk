@@ -2,13 +2,6 @@ package dev.fbvictorhugo.pin_bridge_sdk.api.scopes
 
 sealed class PScope(val scope: String, val description: String) {
 
-    companion object {
-
-        fun build(vararg scopes: PScope): String {
-            return scopes.joinToString(separator = ",") { it.scope }
-        }
-    }
-
     sealed class Pins(scope: String, description: String) : PScope(scope, description) {
 
         /**
