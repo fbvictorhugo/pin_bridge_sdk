@@ -10,7 +10,7 @@ boards, and visual content directly in their apps.
 ## Table of Contents
 
 - [Disclaimer](#disclaimer)
-- [Pinterest  API Compatibility](#Pinterest_API_Compatibility)
+- [Pinterest  API Compatibility](#pinterest--api-compatibility)
 - [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
@@ -131,9 +131,8 @@ This project is licensed under the XXXXX - see the [LICENSE](LICENSE) file for d
 ### Third-Party Licenses
 
 This project uses the following third-party libraries:
-https://square.github.io/retrofit/
 
-- [Retrofit]() > Apache License, Version 2.0
+- [Retrofit](https://square.github.io/retrofit/) > Apache License, Version 2.0
 
 ---
 
