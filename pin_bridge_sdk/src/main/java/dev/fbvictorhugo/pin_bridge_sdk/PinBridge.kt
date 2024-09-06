@@ -51,6 +51,9 @@ object PinBridge {
         configureApiClient()
     }
 
+    /**
+     * Configure Retrofit and instance PinterestApi Client
+     */
     private fun configureApiClient() {
         val gson = GsonBuilder()
             .registerTypeAdapter(Date::class.java, DateTypeAdapter())
@@ -64,7 +67,12 @@ object PinBridge {
         api = retrofit.create(PinterestApi::class.java)
     }
 
-    private fun buildBearerToken(): String {
+    /**
+     * Create string Authorization Header
+     *
+     * "Bearer $_accessToken"
+     */
+    private fun buildAuthorizationHeader(): String {
         return "Bearer $_accessToken"
     }
 
@@ -86,8 +94,8 @@ object PinBridge {
     /**
      * Add scopes for requests.
      *
-     * Default scopes: [PScope.Pins.Read], [PScope.Boards.Read].
      * @param[scopes] List of desired scopes
+     * @see PScope
      */
     fun addScopes(vararg scopes: PScope) {
         _scope.addAll(scopes)
@@ -117,7 +125,7 @@ object PinBridge {
      * Request Access Token.
      * When success returns, it automatically stores the token for the next calls.
      *
-     * @param [clientSecret] aka App Secret or App Secret Key.
+     * @param [clientSecret] App Secret Key in your Pinterest Apps.
      */
     fun requestAccessToken(clientSecret: String, callback: PCallback<PAccessToken>) {
         if (_accessToken == null) {
@@ -163,26 +171,28 @@ object PinBridge {
         sealed class UserAccount {
             companion object {
 
+                /**
+                 * Get account information for the "operation user_account".
+                 */
                 fun getUserAccount(callback: PCallback<PUserAccount>) {
-                    api.getUserAccount(
-                        buildBearerToken()
-                    ).enqueue(object : Callback<PUserAccount> {
-                        override fun onResponse(
-                            call: Call<PUserAccount>,
-                            response: Response<PUserAccount>
-                        ) {
-                            if (response.isSuccessful) {
-                                callback.onSuccessful(PResponse(response))
-                            } else {
-                                callback.onUnsuccessful(PResponse(response))
+                    api.getUserAccount(buildAuthorizationHeader())
+                        .enqueue(object : Callback<PUserAccount> {
+                            override fun onResponse(
+                                call: Call<PUserAccount>,
+                                response: Response<PUserAccount>
+                            ) {
+                                if (response.isSuccessful) {
+                                    callback.onSuccessful(PResponse(response))
+                                } else {
+                                    callback.onUnsuccessful(PResponse(response))
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<PUserAccount>, t: Throwable) {
-                            callback.onFailure(t)
-                        }
+                            override fun onFailure(call: Call<PUserAccount>, t: Throwable) {
+                                callback.onFailure(t)
+                            }
 
-                    })
+                        })
                 }
             }
         }
@@ -190,6 +200,13 @@ object PinBridge {
         sealed class Boards {
             companion object {
 
+                /**
+                 * Get a list of the boards owned by the "operation user_account" + group boards where this account is a collaborator.
+                 *
+                 * @param [bookmark] Cursor used to fetch the next page of items
+                 * @param [pageSize] Maximum number of items to include in a single page of the response. (Default: 25)
+                 * @param [privacy] Privacy setting for a board.
+                 */
                 fun getListBoards(
                     bookmark: String? = null,
                     pageSize: Int? = null,
@@ -200,25 +217,34 @@ object PinBridge {
                         bookmark = bookmark,
                         pageSize = pageSize,
                         privacy = privacy,
-                        header = buildBearerToken()
-                    ).enqueue(object : Callback<GetBoardsResponse> {
-                        override fun onResponse(
-                            call: Call<GetBoardsResponse>,
-                            response: Response<GetBoardsResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                callback.onSuccessful(PResponse(response))
-                            } else {
-                                callback.onUnsuccessful(PResponse(response))
+                        header = buildAuthorizationHeader()
+                    )
+                        .enqueue(object : Callback<GetBoardsResponse> {
+                            override fun onResponse(
+                                call: Call<GetBoardsResponse>,
+                                response: Response<GetBoardsResponse>
+                            ) {
+                                if (response.isSuccessful) {
+                                    callback.onSuccessful(PResponse(response))
+                                } else {
+                                    callback.onUnsuccessful(PResponse(response))
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<GetBoardsResponse>, t: Throwable) {
-                            callback.onFailure(t)
-                        }
-                    })
+                            override fun onFailure(call: Call<GetBoardsResponse>, t: Throwable) {
+                                callback.onFailure(t)
+                            }
+                        })
                 }
 
+                /**
+                 * Get a list of the Pins on a board owned by the "operation user_account" - or on a group board that has been shared with this account.
+                 *
+                 * @param [boardId] Unique identifier of a board.
+                 * @param [bookmark] Cursor used to fetch the next page of items
+                 * @param [pageSize] Maximum number of items to include in a single page of the response. (Default: 25)
+                 * @param [creativeTypes] Pin creative types filter. [CreativeType]
+                 */
                 fun getListPinsOnBoard(
                     boardId: String,
                     bookmark: String? = null,
@@ -233,7 +259,7 @@ object PinBridge {
                         pageSize = pageSize,
                         creativeTypes = creativeTypes,
                         // pinMetrics = pinMetrics,
-                        header = buildBearerToken()
+                        header = buildAuthorizationHeader()
                     ).enqueue(object : Callback<GetPinsResponse> {
                         override fun onResponse(
                             call: Call<GetPinsResponse>,

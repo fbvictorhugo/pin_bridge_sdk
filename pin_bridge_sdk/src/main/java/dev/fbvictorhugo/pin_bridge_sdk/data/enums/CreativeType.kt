@@ -1,8 +1,8 @@
 package dev.fbvictorhugo.pin_bridge_sdk.data.enums
 
 /**
- * Ad creative type enum. For update, only draft ads may update creative type.
+ * Ad creative type enum. Pin creative types filter.
  */
 enum class CreativeType {
-    REGULAR, VIDEO, SHOPPING, CAROUSEL, MAX_VIDEO, SHOP_THE_PIN, COLLECTION, IDEA, SHOWCASE, QUIZ
+    REGULAR, VIDEO, SHOPPING, CAROUSEL, MAX_VIDEO, COLLECTION, IDEA, SHOWCASE, QUIZ
 }
