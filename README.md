@@ -46,11 +46,11 @@ PinBridge.configureInstance(this, CLIENT_ID, REDIRECT_URI)
 Below the instance configuration, add only the necessary scopes.
 
 ``` kotlin
-        PinBridge.addScopes(
-            PScope.UserAccounts.Read,
-            PScope.Boards.Read,
-            PScope.Pins.Read
-        )
+PinBridge.addScopes(
+    PScope.UserAccounts.Read,
+    PScope.Boards.Read,
+    PScope.Pins.Read
+)
 ```
 
 ### 3. Authenticate
