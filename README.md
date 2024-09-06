@@ -1,4 +1,4 @@
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 # Pinterest Bridge SDK
 
@@ -7,13 +7,23 @@ Pinterest REST API. It acts as a facilitator between your app and the wide range
 offered by Pinterest, making it easier for developers to integrate and manage features like pins,
 boards, and visual content directly in their apps.
 
+## Table of Contents
+
+- [Disclaimer](#disclaimer)
+- [Pinterest  API Compatibility](#Pinterest_API_Compatibility)
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+
+---
+
 # Disclaimer
 
 **PinBridge SDK** is an open source Android library, independently created to facilitate integration
 with the Pinterest REST API. We have no official affiliation
 with [Pinterest](https://www.pinterest.com/).
 
-# Compatibility
+# Pinterest  API Compatibility
 
 [Pinterest REST API 5.14.0](https://developers.pinterest.com/docs/api/v5/introduction).
 
@@ -29,6 +39,10 @@ with [Pinterest](https://www.pinterest.com/).
 │
 └── oauth
 ```
+
+# Installation
+
+> comming
 
 # Usage
 
@@ -109,6 +123,17 @@ PinBridge.Requests.UserAccount.getUserAccount(object : PCallback<PUserAccount> {
     }
 })
 ```
+
+## License
+
+This project is licensed under the XXXXX - see the [LICENSE](LICENSE) file for details.
+
+### Third-Party Licenses
+
+This project uses the following third-party libraries:
+https://square.github.io/retrofit/
+
+- [Retrofit]() > Apache License, Version 2.0
 
 ---
 
