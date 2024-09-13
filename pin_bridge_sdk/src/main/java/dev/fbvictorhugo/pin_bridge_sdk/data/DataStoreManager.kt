@@ -7,7 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore by preferencesDataStore(name = "pin_bridge_sdk")
+private val Context.dataStore by preferencesDataStore(name = "datastore")
 
 private val TOKEN_KEY = stringPreferencesKey("key_token")
 
