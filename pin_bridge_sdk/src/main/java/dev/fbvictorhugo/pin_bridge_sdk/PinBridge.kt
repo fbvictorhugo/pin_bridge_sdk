@@ -11,11 +11,14 @@ import dev.fbvictorhugo.pin_bridge_sdk.api.GetPinsResponse
 import dev.fbvictorhugo.pin_bridge_sdk.api.PCallback
 import dev.fbvictorhugo.pin_bridge_sdk.api.PResponse
 import dev.fbvictorhugo.pin_bridge_sdk.api.scopes.PScope
+import dev.fbvictorhugo.pin_bridge_sdk.data.DataStoreManager
 import dev.fbvictorhugo.pin_bridge_sdk.data.PAccessToken
 import dev.fbvictorhugo.pin_bridge_sdk.data.PUserAccount
 import dev.fbvictorhugo.pin_bridge_sdk.data.enums.CreativeType
 import dev.fbvictorhugo.pin_bridge_sdk.data.enums.Privacy
 import dev.fbvictorhugo.pin_bridge_sdk.utils.DateTypeAdapter
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +39,7 @@ object PinBridge {
     private var _authorizationCode: String? = null
     private lateinit var retrofit: Retrofit
     private lateinit var api: PinterestApi
+    private lateinit var dataStoreManager: DataStoreManager
 
     /**
      * @param[context] App Context.
@@ -47,8 +51,15 @@ object PinBridge {
         _AppContext = context
         _clientId = clientId
         _redirectURI = redirectURI
-        _accessToken //TODO Restore token
         configureApiClient()
+        dataStoreManager = DataStoreManager(context)
+
+        runBlocking {
+            launch {
+                _accessToken = dataStoreManager.getToken()
+            }
+        }
+
     }
 
     /**
@@ -143,7 +154,7 @@ object PinBridge {
                     response: Response<PAccessToken>
                 ) {
                     if (response.isSuccessful) {
-                        _accessToken = response.body()?.accessToken
+                        saveToken(response.body()?.accessToken)
                         callback.onSuccessful(PResponse(response))
                     } else {
                         callback.onUnsuccessful(PResponse(response))
@@ -155,6 +166,23 @@ object PinBridge {
                 }
             })
         }
+    }
+
+    private fun saveToken(accessToken: String?) {
+        _accessToken = accessToken
+
+        runBlocking { // this: CoroutineScope
+            launch { // launch a new coroutine and continue
+                dataStoreManager.saveToken(accessToken)
+            }
+        }
+    }
+
+    /**
+     * @return token
+     */
+    fun getToken(): String? {
+        return _accessToken
     }
 
     /**
