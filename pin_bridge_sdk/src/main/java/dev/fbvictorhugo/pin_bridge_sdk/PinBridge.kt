@@ -17,6 +17,8 @@ import dev.fbvictorhugo.pin_bridge_sdk.data.PUserAccount
 import dev.fbvictorhugo.pin_bridge_sdk.data.enums.CreativeType
 import dev.fbvictorhugo.pin_bridge_sdk.data.enums.Privacy
 import dev.fbvictorhugo.pin_bridge_sdk.utils.DateTypeAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
@@ -30,8 +32,9 @@ import java.util.Date
  * PinBridge is the class responsible for all API access and Library management
  */
 object PinBridge {
+    private const val API_PINTEREST_URL = "https://api.pinterest.com"
+    private const val PINTEREST_OAUTH_URL = "https://www.pinterest.com/oauth/?"
 
-    private lateinit var _AppContext: Context
     private lateinit var _clientId: String
     private lateinit var _redirectURI: String
     private val _scope: ArrayList<PScope> = ArrayList()
@@ -42,13 +45,12 @@ object PinBridge {
     private lateinit var dataStoreManager: DataStoreManager
 
     /**
-     * @param[context] App Context.
+     * @param[context] to configure [DataStoreManager].
      * @param[clientId] This is the unique ID for your app also referred to as App ID.
      * @param[redirectURI] This must be one of the redirect URIs registered on your app. The value of this parameter must exactly match the registered value.
      * @constructor Configure Instance of [PinBridge]
      */
     fun configureInstance(context: Context, clientId: String, redirectURI: String) {
-        _AppContext = context
         _clientId = clientId
         _redirectURI = redirectURI
         configureApiClient()
@@ -71,7 +73,7 @@ object PinBridge {
             .create()
 
         retrofit = Retrofit.Builder()
-            .baseUrl("https://api.pinterest.com")
+            .baseUrl(API_PINTEREST_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
@@ -80,22 +82,21 @@ object PinBridge {
 
     /**
      * Create string Authorization Header
-     *
-     * "Bearer $_accessToken"
+     * @return ```"Bearer $_accessToken"```
      */
-    private fun buildAuthorizationHeader(): String {
+    fun buildAuthorizationHeader(): String {
         return "Bearer $_accessToken"
     }
 
     /**
-     * build URL OAuth Authorization
+     * Build URL OAuth Authorization
      */
     private fun buildAuthorizationUrl(
         clientId: String,
         redirectUri: String,
         scope: String
     ): String {
-        return "https://www.pinterest.com/oauth/?" +
+        return PINTEREST_OAUTH_URL +
                 "client_id=$clientId" +
                 "&redirect_uri=$redirectUri" +
                 "&response_type=code" +
@@ -114,21 +115,20 @@ object PinBridge {
 
     /**
      * Authenticate a flow based on the OAuth 2.0 authorization framework.
-     *
+     * @param[context] to start Intent Action View.
      * @see [PinBridge.interceptAuthorizationCode]
      */
-    fun authenticate() {
+    fun authenticate(context: Context) {
         if (_accessToken.isNullOrEmpty()) {
             val scopeString = _scope.joinToString(separator = ",") { it.scope }
             val authorizationUrl = buildAuthorizationUrl(_clientId, _redirectURI, scopeString)
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(authorizationUrl))
                 .addFlags(
-                    Intent.FLAG_ACTIVITY_NO_HISTORY or
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP or
-                            Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            or Intent.FLAG_ACTIVITY_CLEAR_TOP
                 )
 
-            _AppContext.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 
@@ -171,10 +171,8 @@ object PinBridge {
     private fun saveToken(accessToken: String?) {
         _accessToken = accessToken
 
-        runBlocking { // this: CoroutineScope
-            launch { // launch a new coroutine and continue
-                dataStoreManager.saveToken(accessToken)
-            }
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreManager.saveToken(accessToken)
         }
     }
 
@@ -194,6 +192,32 @@ object PinBridge {
         }
     }
 
+    /**
+     * Helper function to make an API call and handle its response or failure in a standardized way.
+     *
+     * @param [call] Retrofit Call object representing the API call to be executed.
+     * @param [callback] Callback to be invoked when the API call completes.
+     *
+     * @param [T] The expected response type of the API call.
+     */
+    private fun <T> callApi(call: Call<T>, callback: PCallback<T>) {
+        call.enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                if (response.isSuccessful) {
+                    callback.onSuccessful(PResponse(response))
+                } else {
+                    callback.onUnsuccessful(PResponse(response))
+                }
+            }
+
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+    // region Requests
+
     sealed class Requests {
 
         sealed class UserAccount {
@@ -203,24 +227,8 @@ object PinBridge {
                  * Get account information for the "operation user_account".
                  */
                 fun getUserAccount(callback: PCallback<PUserAccount>) {
-                    api.getUserAccount(buildAuthorizationHeader())
-                        .enqueue(object : Callback<PUserAccount> {
-                            override fun onResponse(
-                                call: Call<PUserAccount>,
-                                response: Response<PUserAccount>
-                            ) {
-                                if (response.isSuccessful) {
-                                    callback.onSuccessful(PResponse(response))
-                                } else {
-                                    callback.onUnsuccessful(PResponse(response))
-                                }
-                            }
-
-                            override fun onFailure(call: Call<PUserAccount>, t: Throwable) {
-                                callback.onFailure(t)
-                            }
-
-                        })
+                    val call = api.getUserAccount(buildAuthorizationHeader())
+                    callApi(call, callback)
                 }
             }
         }
@@ -229,10 +237,12 @@ object PinBridge {
             companion object {
 
                 /**
-                 * Get a list of the boards owned by the "operation user_account" + group boards where this account is a collaborator.
+                 * Get a list of the boards owned by the "operation user_account" +
+                 * group boards where this account is a collaborator.
                  *
                  * @param [bookmark] Cursor used to fetch the next page of items
-                 * @param [pageSize] Maximum number of items to include in a single page of the response. (Default: 25)
+                 * @param [pageSize] Maximum number of items to include in a single page
+                 *  of the response. (Default: 25)
                  * @param [privacy] Privacy setting for a board.
                  */
                 fun getListBoards(
@@ -241,36 +251,23 @@ object PinBridge {
                     privacy: Privacy? = null,
                     callback: PCallback<GetBoardsResponse>
                 ) {
-                    api.getListBoards(
+                    val call = api.getListBoards(
                         bookmark = bookmark,
                         pageSize = pageSize,
                         privacy = privacy,
                         header = buildAuthorizationHeader()
                     )
-                        .enqueue(object : Callback<GetBoardsResponse> {
-                            override fun onResponse(
-                                call: Call<GetBoardsResponse>,
-                                response: Response<GetBoardsResponse>
-                            ) {
-                                if (response.isSuccessful) {
-                                    callback.onSuccessful(PResponse(response))
-                                } else {
-                                    callback.onUnsuccessful(PResponse(response))
-                                }
-                            }
-
-                            override fun onFailure(call: Call<GetBoardsResponse>, t: Throwable) {
-                                callback.onFailure(t)
-                            }
-                        })
+                    callApi(call, callback)
                 }
 
                 /**
-                 * Get a list of the Pins on a board owned by the "operation user_account" - or on a group board that has been shared with this account.
+                 * Get a list of the Pins on a board owned by the "operation user_account" -
+                 * or on a group board that has been shared with this account.
                  *
                  * @param [boardId] Unique identifier of a board.
                  * @param [bookmark] Cursor used to fetch the next page of items
-                 * @param [pageSize] Maximum number of items to include in a single page of the response. (Default: 25)
+                 * @param [pageSize] Maximum number of items to include in a single page
+                 *  of the response. (Default: 25)
                  * @param [creativeTypes] Pin creative types filter. [CreativeType]
                  */
                 fun getListPinsOnBoard(
@@ -281,32 +278,20 @@ object PinBridge {
                     // pinMetrics: Boolean = false,
                     callback: PCallback<GetPinsResponse>
                 ) {
-                    api.getListPinsOnBoard(
+                    val call = api.getListPinsOnBoard(
                         boardId = boardId,
                         bookmark = bookmark,
                         pageSize = pageSize,
                         creativeTypes = creativeTypes,
                         // pinMetrics = pinMetrics,
                         header = buildAuthorizationHeader()
-                    ).enqueue(object : Callback<GetPinsResponse> {
-                        override fun onResponse(
-                            call: Call<GetPinsResponse>,
-                            response: Response<GetPinsResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                callback.onSuccessful(PResponse(response))
-                            } else {
-                                callback.onUnsuccessful(PResponse(response))
-                            }
-                        }
-
-                        override fun onFailure(call: Call<GetPinsResponse>, t: Throwable) {
-                            callback.onFailure(t)
-                        }
-                    })
+                    )
+                    callApi(call, callback)
                 }
             }
         }
     }
+
+    //endregion
 
 }

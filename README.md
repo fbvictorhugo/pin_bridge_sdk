@@ -25,7 +25,7 @@ with [Pinterest](https://www.pinterest.com/).
 
 # Pinterest  API Compatibility
 
-[Pinterest REST API 5.14.0](https://developers.pinterest.com/docs/api/v5/introduction).
+[Pinterest REST API v5](https://developers.pinterest.com/docs/api/v5/introduction).
 
 ```
 │
