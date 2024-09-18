@@ -1,7 +1,12 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    `maven-publish`
 }
+
+val localProperties = loadLocalProperties()
 
 android {
     namespace = "dev.fbvictorhugo.pin_bridge_sdk"
@@ -33,6 +38,71 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+fun getVersionName(): String {
+    return "0.0.4"
+}
+
+fun getArtificatId(): String {
+    return "pin_bridge_sdk"
+}
+
+fun loadLocalProperties(): Properties {
+    val properties = Properties()
+    val localPropertiesFile = file("..\\local.properties")
+
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { properties.load(it) }
+    }
+    return properties
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/fbvictorhugo/pin_bridge_sdk")
+            credentials {
+                username = localProperties.getProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = localProperties.getProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("gpr") {
+            run {
+                groupId = "dev.fbvictorhugo"
+                artifactId = getArtificatId()
+                version = getVersionName()
+                artifact("$projectDir/build/outputs/aar/${getArtificatId()}-release.aar")
+
+                pom {
+                    name.set("PinBridge SDK")
+                    description.set("Android library for Pinterest REST API")
+                    url.set("https://github.com/fbvictorhugo/pin_bridge_sdk")
+
+                    licenses {
+                        license {
+                            name.set("The Apache License, Version 2.0")
+                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set("fbvictorhugo")
+                            name.set("Victor Hugo")
+                        }
+                    }
+
+                    scm {
+                        url.set("https://github.com/fbvictorhugo/pin_bridge_sdk")
+                    }
+                }
+            }
+        }
     }
 }
 

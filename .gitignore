@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/android,windows,linux,macos,kotlin,java,gradle,androidstudio,visualstudio,visualstudiocode,intellij
 # Edit at https://www.toptal.com/developers/gitignore?templates=android,windows,linux,macos,kotlin,java,gradle,androidstudio,visualstudio,visualstudiocode,intellij
 
+# GitHub Propertis
+github.properties
+
 ### Android ###
 # Gradle files
 .gradle/

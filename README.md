@@ -1,4 +1,4 @@
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md) [![Library Version](https://img.shields.io/badge/LibraryVersion-v0.0.4-brightgreen)](https://github.com/fbvictorhugo/pin_bridge_sdk/packages/2257454)
 
 # Pinterest Bridge SDK
 
@@ -126,7 +126,7 @@ PinBridge.Requests.UserAccount.getUserAccount(object : PCallback<PUserAccount> {
 
 ## License
 
-This project is licensed under the XXXXX - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License, Version 2.0 - see the [LICENSE](LICENSE) file for details.
 
 ### Third-Party Licenses
 
