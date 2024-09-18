@@ -42,12 +42,24 @@ with [Pinterest](https://www.pinterest.com/).
 
 # Installation
 
-> comming
+### GitHub Packages
+To use a published package from GitHub Packages, add the package as a dependency and add the repository to your project. [See: Using a published package in GitHub Docs](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package)
+Add the package dependencies to your `build.gradle` file (Gradle Groovy) or `build.gradle.kts` file (Kotlin DSL).
+
+```
+dependencies {
+    implementation("dev.fbvictorhugo:pin_bridge_sdk:0.0.4")
+}
+```
+
+### Manual Addition 
+Get the most current version of `pin_bridge_sdk-xxxx.aar` in [Packages](https://github.com/fbvictorhugo/pin_bridge_sdk/packages/2257454).
+And add as **Jar/Aar Dependency** in your project.
 
 # Usage
 
-Once you have already configured your App
-on [Pinterest Developer Platform](https://developers.pinterest.com/apps/), follow:
+Once you have already configured your App 
+on [Pinterest Developer Platform](https://developers.pinterest.com/apps/), follow the steps *(examples in Kotlin)*: 
 
 ### 1. Configure Instance
 
