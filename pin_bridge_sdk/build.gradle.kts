@@ -65,8 +65,10 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/fbvictorhugo/pin_bridge_sdk")
             credentials {
-                username = localProperties.getProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = localProperties.getProperty("gpr.key") ?: System.getenv("TOKEN")
+                //username = localProperties.getProperty("gpr.user") ?: System.getenv("USERNAME")
+                //password = localProperties.getProperty("gpr.key") ?: System.getenv("TOKEN")
+                username = System.getenv("USERNAME")
+                password = System.getenv("TOKEN")
             }
         }
     }
