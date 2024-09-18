@@ -42,7 +42,7 @@ android {
 }
 
 fun getVersionName(): String {
-    return "0.0.4"
+    return "0.0.5"
 }
 
 fun getArtificatId(): String {
