@@ -67,8 +67,8 @@ publishing {
             credentials {
                 //username = localProperties.getProperty("gpr.user") ?: System.getenv("USERNAME")
                 //password = localProperties.getProperty("gpr.key") ?: System.getenv("TOKEN")
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
+                username = System.getenv("USERNAME") ?: error("USERNAME not found")
+                password = System.getenv("TOKEN") ?: error("TOKEN not found")
             }
         }
     }
