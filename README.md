@@ -1,4 +1,4 @@
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md) [![Library Version](https://img.shields.io/badge/LibraryVersion-v0.0.4-brightgreen)](https://github.com/fbvictorhugo/pin_bridge_sdk/packages/2257454)
+ [![Library Version](https://img.shields.io/badge/LibraryVersion-v0.0.4-brightgreen)](https://github.com/fbvictorhugo/pin_bridge_sdk/packages/2257454) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md) ![GitHub License](https://img.shields.io/github/license/fbvictorhugo/pin_bridge_sdk)
 
 # Pinterest Bridge SDK
 
