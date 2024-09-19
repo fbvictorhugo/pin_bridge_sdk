@@ -23,11 +23,11 @@ jobs:
     - name: Build with Gradle
       run: gradle build
       env:
-        GPR_USR: fbvictorhugo
-        GPR_KEY: ${{ secrets.GITHUB_TOKEN }}
+        GPR_USR: ${{ secrets.GPR_USR }}
+        GPR_KEY: ${{ secrets.GPR_KEY }}
 
     - name: Publish to GitHub Packages
       run: gradle publish
       env:
-        GPR_USR: fbvictorhugo
-        GPR_KEY: ${{ secrets.GITHUB_TOKEN }}
+        GPR_USR: ${{ secrets.GPR_USR }}
+        GPR_KEY: ${{ secrets.GPR_KEY }}

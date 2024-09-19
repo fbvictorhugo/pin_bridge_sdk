@@ -6,7 +6,7 @@ plugins {
     `maven-publish`
 }
 
-//val localProperties = loadLocalProperties()
+val localProperties = loadLocalProperties()
 
 android {
     namespace = "dev.fbvictorhugo.pin_bridge_sdk"
@@ -48,7 +48,7 @@ fun getVersionName(): String {
 fun getArtificatId(): String {
     return "pin_bridge_sdk"
 }
-/*
+
 fun loadLocalProperties(): Properties {
     val properties = Properties()
     val localPropertiesFile = file("..\\local.properties")
@@ -57,7 +57,7 @@ fun loadLocalProperties(): Properties {
         localPropertiesFile.inputStream().use { properties.load(it) }
     }
     return properties
-}*/
+}
 
 publishing {
     repositories {
@@ -65,8 +65,10 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/fbvictorhugo/pin_bridge_sdk")
             credentials {
-                username = System.getenv("GPR_USR") ?: error("\nGPR_USR not found !!!\n")
-                password = System.getenv("GPR_KEY") ?: error("\nGPR_KEY not found !!!\n")
+                username = localProperties.getProperty("gpr.usr") ?: System.getenv("GPR_USR")
+                        ?: error("\nGPR_USR not found !!!\n")
+                password = localProperties.getProperty("gpr.key") ?: System.getenv("GPR_KEY")
+                        ?: error("\nGPR_KEY not found !!!\n")
             }
         }
     }
