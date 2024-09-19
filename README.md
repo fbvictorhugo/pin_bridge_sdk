@@ -1,5 +1,4 @@
-[![Library Version](https://img.shields.io/badge/LibraryVersion-v0.0.4-brightgreen)](https://github.com/fbvictorhugo/pin_bridge_sdk/packages/2257454)
-[![Gradle publish GitHub Packages](https://github.com/fbvictorhugo/pin_bridge_sdk/actions/workflows/github-packages-publish.yml/badge.svg?branch=main)](https://github.com/fbvictorhugo/pin_bridge_sdk/actions/workflows/github-packages-publish.yml) 
+[![Library Version](https://img.shields.io/badge/LibraryVersion-v0.0.1-brightgreen)](https://github.com/fbvictorhugo/pin_bridge_sdk/packages/2257454) 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md) 
 [![GitHub License](https://img.shields.io/github/license/fbvictorhugo/pin_bridge_sdk)](LICENSE)
 
@@ -49,14 +48,14 @@ with [Pinterest](https://www.pinterest.com/).
 To use a published package from GitHub Packages, add the package as a dependency and add the repository to your project. [See: Using a published package in GitHub Docs](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package)
 Add the package dependencies to your `build.gradle` file (Gradle Groovy) or `build.gradle.kts` file (Kotlin DSL).
 
-```
+``` gradle
 dependencies {
-    implementation("dev.fbvictorhugo:pin_bridge_sdk:0.0.4")
+    implementation("dev.fbvictorhugo:pin_bridge_sdk:x.x.x")
 }
 ```
 
 ### Manual Addition 
-Get the most current version of `pin_bridge_sdk-xxxx.aar` in [Packages](https://github.com/fbvictorhugo/pin_bridge_sdk/packages/2257454).
+Get the most current version of `pin_bridge_sdk-x.x.x.aar` in [Packages](https://github.com/fbvictorhugo/pin_bridge_sdk/packages/2259150).
 And add as **Jar/Aar Dependency** in your project.
 
 # Usage
