@@ -42,7 +42,7 @@ android {
 }
 
 fun getVersionName(): String {
-    return "0.0.5"
+    return "0.0.1"
 }
 
 fun getArtificatId(): String {
@@ -65,10 +65,10 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/fbvictorhugo/pin_bridge_sdk")
             credentials {
-                username = localProperties.getProperty("gpr.user") ?: System.getenv("USERNAME")
-                        ?: error("USERNAME not found")
-                password = localProperties.getProperty("gpr.key") ?: System.getenv("TOKEN")
-                        ?: error("TOKEN not found")
+                username = localProperties.getProperty("gpr.usr") ?: System.getenv("GPR_USR")
+                        ?: error("\nGPR_USR not found !!!\n")
+                password = localProperties.getProperty("gpr.key") ?: System.getenv("GPR_KEY")
+                        ?: error("\nGPR_KEY not found !!!\n")
             }
         }
     }

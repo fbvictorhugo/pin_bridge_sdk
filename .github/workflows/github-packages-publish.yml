@@ -26,5 +26,5 @@ jobs:
     - name: Publish to GitHub Packages
       run: gradle publish
       env:
-        USERNAME: ${{ env.USERNAME }}
-        TOKEN: ${{ env.TOKEN }}
+        GPR_USR: ${{ secrets.GPR_USR }}
+        GPR_KEY: ${{ secrets.GPR_KEY }}
