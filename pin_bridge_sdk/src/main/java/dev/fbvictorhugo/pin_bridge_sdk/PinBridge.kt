@@ -117,9 +117,10 @@ object PinBridge {
     /**
      * Authenticate a flow based on the OAuth 2.0 authorization framework.
      * @param[context] to start Intent Action View.
+     * @return [true] if you have already been authenticated and have a saved token
      * @see [PinBridge.interceptAuthorizationCode]
      */
-    fun authenticate(context: Context) {
+    fun authenticate(context: Context): Boolean {
         if (_accessToken.isNullOrEmpty()) {
             val scopeString = _scope.joinToString(separator = ",") { it.scope }
             val authorizationUrl = buildAuthorizationUrl(_clientId, _redirectURI, scopeString)
@@ -130,6 +131,9 @@ object PinBridge {
                 )
 
             context.startActivity(intent)
+            return false
+        } else {
+            return true
         }
     }
 
