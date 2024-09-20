@@ -8,7 +8,7 @@ import android.util.Base64
 import com.google.gson.GsonBuilder
 import dev.fbvictorhugo.pin_bridge_sdk.api.GetBoardsResponse
 import dev.fbvictorhugo.pin_bridge_sdk.api.GetPinsResponse
-import dev.fbvictorhugo.pin_bridge_sdk.api.PCallback
+import dev.fbvictorhugo.pin_bridge_sdk.api.PApiCallback
 import dev.fbvictorhugo.pin_bridge_sdk.api.PResponse
 import dev.fbvictorhugo.pin_bridge_sdk.api.scopes.PScope
 import dev.fbvictorhugo.pin_bridge_sdk.data.DataStoreManager
@@ -17,6 +17,7 @@ import dev.fbvictorhugo.pin_bridge_sdk.data.PUserAccount
 import dev.fbvictorhugo.pin_bridge_sdk.data.enums.CreativeType
 import dev.fbvictorhugo.pin_bridge_sdk.data.enums.Privacy
 import dev.fbvictorhugo.pin_bridge_sdk.utils.DateTypeAdapter
+import dev.fbvictorhugo.pin_bridge_sdk.utils.PCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -138,7 +139,7 @@ object PinBridge {
      *
      * @param [clientSecret] App Secret Key in your Pinterest Apps.
      */
-    fun requestAccessToken(clientSecret: String, callback: PCallback<PAccessToken>) {
+    fun requestAccessToken(clientSecret: String, callback: PApiCallback<PAccessToken>) {
         if (_accessToken == null) {
             val authHeader = "Basic " + Base64.encodeToString(
                 ("$_clientId:$clientSecret").toByteArray(), Base64.NO_WRAP
@@ -186,9 +187,17 @@ object PinBridge {
     /**
      * Intercept and setup the authorization code, received from the OAuth request ([PinBridge.authenticate]).
      */
-    fun interceptAuthorizationCode(intent: Intent) {
+    fun interceptAuthorizationCode(intent: Intent, callback: PCallback) {
         if (intent.action == Intent.ACTION_VIEW && intent.data.toString().contains(_redirectURI)) {
             _authorizationCode = Uri.parse(intent.data.toString()).getQueryParameter("code")
+
+            if (_authorizationCode.isNullOrEmpty()) {
+                callback.onUnsuccessful()
+            } else {
+                callback.onSuccessful()
+            }
+        } else {
+            callback.onUnsuccessful()
         }
     }
 
@@ -200,7 +209,7 @@ object PinBridge {
      *
      * @param [T] The expected response type of the API call.
      */
-    private fun <T> callApi(call: Call<T>, callback: PCallback<T>) {
+    private fun <T> callApi(call: Call<T>, callback: PApiCallback<T>) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
@@ -226,7 +235,7 @@ object PinBridge {
                 /**
                  * Get account information for the "operation user_account".
                  */
-                fun getUserAccount(callback: PCallback<PUserAccount>) {
+                fun getUserAccount(callback: PApiCallback<PUserAccount>) {
                     val call = api.getUserAccount(buildAuthorizationHeader())
                     callApi(call, callback)
                 }
@@ -249,7 +258,7 @@ object PinBridge {
                     bookmark: String? = null,
                     pageSize: Int? = null,
                     privacy: Privacy? = null,
-                    callback: PCallback<GetBoardsResponse>
+                    callback: PApiCallback<GetBoardsResponse>
                 ) {
                     val call = api.getListBoards(
                         bookmark = bookmark,
@@ -276,7 +285,7 @@ object PinBridge {
                     pageSize: Int? = null,
                     creativeTypes: CreativeType? = null,
                     // pinMetrics: Boolean = false,
-                    callback: PCallback<GetPinsResponse>
+                    callback: PApiCallback<GetPinsResponse>
                 ) {
                     val call = api.getListPinsOnBoard(
                         boardId = boardId,

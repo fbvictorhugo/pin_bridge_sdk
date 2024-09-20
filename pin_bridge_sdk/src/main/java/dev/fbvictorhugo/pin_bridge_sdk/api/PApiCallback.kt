@@ -1,6 +1,6 @@
 package dev.fbvictorhugo.pin_bridge_sdk.api
 
-interface PCallback<T> {
+interface PApiCallback<T> {
 
     fun onSuccessful(response: PResponse<T>) {}
 

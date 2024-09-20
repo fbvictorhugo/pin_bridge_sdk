@@ -109,7 +109,7 @@ When the token is successfully received, PinBridge automatically manages it, sav
 but if necessary you can recover it.
 
 ``` kotlin
-PinBridge.requestAccessToken(CLIENT_SECRET, object : PCallback<PAccessToken> {
+PinBridge.requestAccessToken(CLIENT_SECRET, object : PApiCallback<PAccessToken> {
 
     override fun onSuccessful(response: PResponse<PAccessToken>) {
         toast("onSuccessful Token")
@@ -126,7 +126,7 @@ PinBridge.requestAccessToken(CLIENT_SECRET, object : PCallback<PAccessToken> {
 Access to available APIs is in calls from `PinBridge.Requests`.
 
 ``` kotlin
-PinBridge.Requests.UserAccount.getUserAccount(object : PCallback<PUserAccount> {
+PinBridge.Requests.UserAccount.getUserAccount(object : PApiCallback<PUserAccount> {
 
     override fun onSuccessful(response: PResponse<PUserAccount>) {
         toast("Hello ${response.getObject()?.username} ! ")
